@@ -5,6 +5,7 @@ from PIL import Image
 import numpy as np
 import io
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 
@@ -14,8 +15,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
+load_dotenv()
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+
 origins = [
-    "http://localhost:5173",  
+    FRONTEND_URL,
 ]
 
 app.add_middleware(
@@ -117,5 +122,3 @@ async def predict(file: UploadFile = File(...)):
 @app.get("/")
 def read_root():
     return {"status": "Waste Classifier API is running."}
-
-
